@@ -1,0 +1,28 @@
+.card-img {
+	border: 1px solid gray;
+	width: 150px;
+	height: 150px;
+}
+
+.hp {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: black;
+	color: #ffffff;
+	text-align: center;
+}
+
+.card-container{
+	width:150px;
+	height: 150px;
+	margin: 2%;
+}
+
+.card-container:hover{
+	cursor: cell;
+}
+
+.hide {
+	display: none;
+}
