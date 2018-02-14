@@ -24,18 +24,31 @@ $(document).ready(function () {
 		enemiesDefeated: 0,
 		adjustValues: function () {
 			for (var i = 0; i < 2; i++) {
+				this[this.heroPicks[i]].hp -= this[this.enemyPicks[i]].counterAttackPower;
+				this[this.enemyPicks[i]].hp -= this[this.heroPicks[i]].attackPower;
+				this[this.heroPicks[i]].attackPower *= 2;
 				//check if a hero has fallen
 				if (this[this.heroPicks[i]].hp < 0 && this[this.enemyPicks[i]].hp > 0) {
 					$('#peril').text('Yikes you lost ' + this[this.heroPicks[i]].name);
-					
-				//check if a enemy has fallen
-				}else if(this[this.heroPicks[i]].hp > 0 && this[this.enemyPicks[i]].hp < 0){
+
+					//check if a enemy has fallen
+				} else if (this[this.heroPicks[i]].hp > 0 && this[this.enemyPicks[i]].hp < 0) {
+					this.enemyCardsPicked--;
 					$('#peril').text('Please select a new foe because ' + this[this.enemyPicks[i]].name + ' has fallen.');
-					
-				}else{
-					this[this.heroPicks[i]].hp -= this[this.enemyPicks[i]].counterAttackPower;
-					this[this.enemyPicks[i]].hp -= this[this.heroPicks[i]].attackPower;
-					this[this.heroPicks[i]].attackPower *= 2;
+					$('#'+this.enemyPicks[i]).remove();
+					$('.fallen').append('<div class="col-md-2 card-container" id="' + this.enemyPicks[i] + '"><img class="card-img" src="assets/images/' + this[this.enemyPicks[i]].name + '.jpg" alt="' + this[this.enemyPicks[i]].name + '"><div class="hp" id="' + this.enemyPicks[i] + 'HP"><h5>' + this[this.enemyPicks[i]].hp + '</h5></div>');
+					$('.fallen').attr('class','row fallen');
+					// $('#'+this[i]).attr('class', '')
+					$('.enemies').attr('class', 'row enemies');
+					$('.more-enemies').on('click', function(){
+						$('#peril').text('');
+						characters.enemyCardsPicked++;
+						characters.enemyPicks[i] = $(this).attr('id');
+						$('.enemies').attr('class','row enemies hide');
+						console.log('new enemy: ' + $(this).attr('id'));
+					});
+				} else {
+
 				}
 				console.log('hero0: ' + this[this.heroPicks[i]].hp);
 
@@ -97,7 +110,7 @@ $(document).ready(function () {
 
 	initializeBoard();
 	//*****************Done initializing game ***************************************************/////////////////////////////////////////////
-	function refreshOnClicks(){
+	function refreshOnClicks() {
 		$('.available').on('click', function () {
 			$('#play-by-play').text('');
 			if (characters.enemyCardsPicked === 0 && characters.smashCardsPicked != 2) {
@@ -109,39 +122,42 @@ $(document).ready(function () {
 				if (characters.smashCardsPicked === 2) {
 					$('.enemies').append($('.available'));
 					$('.available').attr('class', 'col-md-2 card-container enemy-options');
+					refreshOnClicks();
 				}
 			}
-			refreshOnClicks();
 		});
 		$('.enemy-options').on('click', function () {
+			
 			$('#play-by-play').text('');
 			if (characters.enemyCardsPicked === 2) {
-				$('.enemies').attr('class', 'hide');
+				$('.enemies').attr('class', 'row enemies hide');
 			} else {
-				characters.enemyCardsPicked++;
+				
 				console.log(this, ' ecp: ' + characters.enemyCardsPicked);
 				$('.defenders-ready').append(this);
 				$(this).attr('class', 'col-md-2 card-container picked-enemy');
 				characters.enemyPicks.push($(this).attr('id'));
 			}
-			refreshOnClicks();
+			characters.enemyCardsPicked++;
 		});
-		$('#btn-attack').on('click', function () {
-			if (characters.enemyCardsPicked > 1 && characters.smashCardsPicked > 1) {
-				characters.adjustValues();
-				characters.displayAttackOutcome();
-			} else {
-				$('#play-by-play').text('Game not set up yet, finish picking your cards.');
-			}
-			console.log(characters.heroAttackPower);
-		});
+		
+
 	}
 	refreshOnClicks();
-	
+
+	$('#btn-attack').on('click', function () {
+		if (characters.enemyCardsPicked > 1 && characters.smashCardsPicked > 1) {
+			characters.adjustValues();
+			characters.displayAttackOutcome();
+		} else {
+			$('#play-by-play').text('Game not set up yet, finish picking your cards.');
+		}
+		console.log(characters.heroAttackPower);
+	});
 
 
 
-	
+
 
 
 
