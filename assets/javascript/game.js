@@ -9,7 +9,6 @@ $(document).ready(function () {
 		card6: { name: 'bear_cavalry', hp: 0, hpWeight: 10, attackPower: 0, attackPowerWeight: 6, counterAttackPower: 0, counterAttackPowerWeight: 2 },
 		card7: { name: 'ships_captain', hp: 0, hpWeight: 10, attackPower: 0, attackPowerWeight: 6, counterAttackPower: 0, counterAttackPowerWeight: 2 },
 		card8: { name: 'starlyte', hp: 0, hpWeight: 10, attackPower: 0, attackPowerWeight: 6, counterAttackPower: 0, counterAttackPowerWeight: 2 },
-		card: '',
 		characterCount: 9,
 		selectedCards: [],
 		smashCardsPicked: 0,
@@ -38,14 +37,20 @@ $(document).ready(function () {
 					$('#'+this.enemyPicks[i]).remove();
 					$('.fallen').append('<div class="col-md-2 card-container" id="' + this.enemyPicks[i] + '"><img class="card-img" src="assets/images/' + this[this.enemyPicks[i]].name + '.jpg" alt="' + this[this.enemyPicks[i]].name + '"><div class="hp" id="' + this.enemyPicks[i] + 'HP"><h5>' + this[this.enemyPicks[i]].hp + '</h5></div>');
 					$('.fallen').attr('class','row fallen');
-					// $('#'+this[i]).attr('class', '')
+					if(this.enemyCardsPicked < 2){
+
+					}
 					$('.enemies').attr('class', 'row enemies');
+					
+
+					//Select a new enemy
 					$('.more-enemies').on('click', function(){
 						$('#peril').text('');
 						characters.enemyCardsPicked++;
-						characters.enemyPicks[i] = $(this).attr('id');
+						characters.enemyPicks[i-1] = $(this).attr('id');
 						$('.enemies').attr('class','row enemies hide');
-						console.log('new enemy: ' + $(this).attr('id'));
+						$(this).attr('class', 'col-md-2 card-container picked-enemy');
+						console.log('new enemy: ' + $(this).attr('id') + ' the new enemy ' + characters.enemyPicks[i] + ' i ' + i);
 					});
 				} else {
 
@@ -131,6 +136,7 @@ $(document).ready(function () {
 			$('#play-by-play').text('');
 			if (characters.enemyCardsPicked === 2) {
 				$('.enemies').attr('class', 'row enemies hide');
+				$('.enemies').children().attr('class','col-md-2 card-container more-enemies');
 			} else {
 				
 				console.log(this, ' ecp: ' + characters.enemyCardsPicked);
